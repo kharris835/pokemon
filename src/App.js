@@ -1,5 +1,6 @@
 import "./App.css";
 import pokemon from "./pokemon.json";
+import React from "react";
 
 const PokemonRow = ({ pokemon }) => (
   <tr>
@@ -9,6 +10,8 @@ const PokemonRow = ({ pokemon }) => (
 );
 
 function App() {
+  const [filter, setFilter] = React.useState("");
+
   return (
     <div
       style={{
@@ -18,6 +21,7 @@ function App() {
       }}
     >
       <h1 className="title">Pokemon Search</h1>
+      <input value={filter} onChange={(evt) => setFilter(evt.target.value)} />
       <table width="100%">
         <thead>
           <tr>
@@ -26,9 +30,14 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {pokemon.slice(0, 20).map((pokemon) => (
-            <PokemonRow pokemon={pokemon} key={pokemon.id} />
-          ))}
+          {pokemon
+            .filter((pokemon) =>
+              pokemon.name.english.toLowerCase().includes(filter.toLowerCase())
+            )
+            .slice(0, 20)
+            .map((pokemon) => (
+              <PokemonRow pokemon={pokemon} key={pokemon.id} />
+            ))}
         </tbody>
       </table>
     </div>
